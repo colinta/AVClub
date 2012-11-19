@@ -217,7 +217,7 @@
             [self startSession];
         });
 
-        [self setVideoPreviewView:videoView];
+        self.viewFinderView = videoView;
     }
 }
 
