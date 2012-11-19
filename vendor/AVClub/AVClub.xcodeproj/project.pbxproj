@@ -1,0 +1,290 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1D0A439F1656ED2800D2DEA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D0A439E1656ED2800D2DEA4 /* Foundation.framework */; };
+		1D0A43A41656ED2800D2DEA4 /* AVClub.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1D0A43A31656ED2800D2DEA4 /* AVClub.h */; };
+		1D0A43A61656ED2800D2DEA4 /* AVClub.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D0A43A51656ED2800D2DEA4 /* AVClub.m */; };
+		1D0A43AD1656EFBA00D2DEA4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D0A43AC1656EFBA00D2DEA4 /* UIKit.framework */; };
+		1D0A43AF1656EFC200D2DEA4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D0A43AE1656EFC200D2DEA4 /* AVFoundation.framework */; };
+		1D0A43B11656EFD000D2DEA4 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D0A43B01656EFD000D2DEA4 /* MobileCoreServices.framework */; };
+		1D0A43B31656EFDD00D2DEA4 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D0A43B21656EFDD00D2DEA4 /* CoreMedia.framework */; };
+		1D0A43B51656EFE400D2DEA4 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D0A43B41656EFE400D2DEA4 /* CoreVideo.framework */; };
+		1D0A43B71656EFEA00D2DEA4 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D0A43B61656EFEA00D2DEA4 /* AssetsLibrary.framework */; };
+		1D0A43B91656EFF700D2DEA4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D0A43B81656EFF700D2DEA4 /* CoreGraphics.framework */; };
+		1D0A43BB1656F00A00D2DEA4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D0A43BA1656F00A00D2DEA4 /* QuartzCore.framework */; };
+		1D0A43BD1656F01100D2DEA4 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D0A43BC1656F01100D2DEA4 /* MediaPlayer.framework */; };
+		1D0A43C21656F0DA00D2DEA4 /* AVCamRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D0A43BF1656F0DA00D2DEA4 /* AVCamRecorder.m */; };
+		1D0A43C31656F0DA00D2DEA4 /* AVCamUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D0A43C11656F0DA00D2DEA4 /* AVCamUtilities.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1D0A43991656ED2800D2DEA4 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+				1D0A43A41656ED2800D2DEA4 /* AVClub.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		1D0A439B1656ED2800D2DEA4 /* libAVClub.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAVClub.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D0A439E1656ED2800D2DEA4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1D0A43A21656ED2800D2DEA4 /* AVClub-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVClub-Prefix.pch"; sourceTree = "<group>"; };
+		1D0A43A31656ED2800D2DEA4 /* AVClub.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVClub.h; sourceTree = "<group>"; };
+		1D0A43A51656ED2800D2DEA4 /* AVClub.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVClub.m; sourceTree = "<group>"; };
+		1D0A43AC1656EFBA00D2DEA4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		1D0A43AE1656EFC200D2DEA4 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		1D0A43B01656EFD000D2DEA4 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		1D0A43B21656EFDD00D2DEA4 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		1D0A43B41656EFE400D2DEA4 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		1D0A43B61656EFEA00D2DEA4 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		1D0A43B81656EFF700D2DEA4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		1D0A43BA1656F00A00D2DEA4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		1D0A43BC1656F01100D2DEA4 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		1D0A43BE1656F0DA00D2DEA4 /* AVCamRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCamRecorder.h; sourceTree = "<group>"; };
+		1D0A43BF1656F0DA00D2DEA4 /* AVCamRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVCamRecorder.m; sourceTree = "<group>"; };
+		1D0A43C01656F0DA00D2DEA4 /* AVCamUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCamUtilities.h; sourceTree = "<group>"; };
+		1D0A43C11656F0DA00D2DEA4 /* AVCamUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVCamUtilities.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1D0A43981656ED2800D2DEA4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D0A43BD1656F01100D2DEA4 /* MediaPlayer.framework in Frameworks */,
+				1D0A43BB1656F00A00D2DEA4 /* QuartzCore.framework in Frameworks */,
+				1D0A43B91656EFF700D2DEA4 /* CoreGraphics.framework in Frameworks */,
+				1D0A43B71656EFEA00D2DEA4 /* AssetsLibrary.framework in Frameworks */,
+				1D0A43B51656EFE400D2DEA4 /* CoreVideo.framework in Frameworks */,
+				1D0A43B31656EFDD00D2DEA4 /* CoreMedia.framework in Frameworks */,
+				1D0A43B11656EFD000D2DEA4 /* MobileCoreServices.framework in Frameworks */,
+				1D0A43AF1656EFC200D2DEA4 /* AVFoundation.framework in Frameworks */,
+				1D0A43AD1656EFBA00D2DEA4 /* UIKit.framework in Frameworks */,
+				1D0A439F1656ED2800D2DEA4 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1D0A43901656ED2800D2DEA4 = {
+			isa = PBXGroup;
+			children = (
+				1D0A43A01656ED2800D2DEA4 /* AVClub */,
+				1D0A439D1656ED2800D2DEA4 /* Frameworks */,
+				1D0A439C1656ED2800D2DEA4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1D0A439C1656ED2800D2DEA4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1D0A439B1656ED2800D2DEA4 /* libAVClub.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1D0A439D1656ED2800D2DEA4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1D0A43BC1656F01100D2DEA4 /* MediaPlayer.framework */,
+				1D0A43BA1656F00A00D2DEA4 /* QuartzCore.framework */,
+				1D0A43B81656EFF700D2DEA4 /* CoreGraphics.framework */,
+				1D0A43B61656EFEA00D2DEA4 /* AssetsLibrary.framework */,
+				1D0A43B41656EFE400D2DEA4 /* CoreVideo.framework */,
+				1D0A43B21656EFDD00D2DEA4 /* CoreMedia.framework */,
+				1D0A43B01656EFD000D2DEA4 /* MobileCoreServices.framework */,
+				1D0A43AE1656EFC200D2DEA4 /* AVFoundation.framework */,
+				1D0A43AC1656EFBA00D2DEA4 /* UIKit.framework */,
+				1D0A439E1656ED2800D2DEA4 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1D0A43A01656ED2800D2DEA4 /* AVClub */ = {
+			isa = PBXGroup;
+			children = (
+				1D0A43A31656ED2800D2DEA4 /* AVClub.h */,
+				1D0A43A51656ED2800D2DEA4 /* AVClub.m */,
+				1D0A43BE1656F0DA00D2DEA4 /* AVCamRecorder.h */,
+				1D0A43BF1656F0DA00D2DEA4 /* AVCamRecorder.m */,
+				1D0A43C01656F0DA00D2DEA4 /* AVCamUtilities.h */,
+				1D0A43C11656F0DA00D2DEA4 /* AVCamUtilities.m */,
+				1D0A43A11656ED2800D2DEA4 /* Supporting Files */,
+			);
+			path = AVClub;
+			sourceTree = "<group>";
+		};
+		1D0A43A11656ED2800D2DEA4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1D0A43A21656ED2800D2DEA4 /* AVClub-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1D0A439A1656ED2800D2DEA4 /* AVClub */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D0A43A91656ED2800D2DEA4 /* Build configuration list for PBXNativeTarget "AVClub" */;
+			buildPhases = (
+				1D0A43971656ED2800D2DEA4 /* Sources */,
+				1D0A43981656ED2800D2DEA4 /* Frameworks */,
+				1D0A43991656ED2800D2DEA4 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AVClub;
+			productName = AVClub;
+			productReference = 1D0A439B1656ED2800D2DEA4 /* libAVClub.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1D0A43921656ED2800D2DEA4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = colinta;
+			};
+			buildConfigurationList = 1D0A43951656ED2800D2DEA4 /* Build configuration list for PBXProject "AVClub" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 1D0A43901656ED2800D2DEA4;
+			productRefGroup = 1D0A439C1656ED2800D2DEA4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1D0A439A1656ED2800D2DEA4 /* AVClub */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D0A43971656ED2800D2DEA4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D0A43A61656ED2800D2DEA4 /* AVClub.m in Sources */,
+				1D0A43C21656F0DA00D2DEA4 /* AVCamRecorder.m in Sources */,
+				1D0A43C31656F0DA00D2DEA4 /* AVCamUtilities.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1D0A43A71656ED2800D2DEA4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		1D0A43A81656ED2800D2DEA4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1D0A43AA1656ED2800D2DEA4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/AVClub.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AVClub/AVClub-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		1D0A43AB1656ED2800D2DEA4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/AVClub.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AVClub/AVClub-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1D0A43951656ED2800D2DEA4 /* Build configuration list for PBXProject "AVClub" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D0A43A71656ED2800D2DEA4 /* Debug */,
+				1D0A43A81656ED2800D2DEA4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1D0A43A91656ED2800D2DEA4 /* Build configuration list for PBXNativeTarget "AVClub" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D0A43AA1656ED2800D2DEA4 /* Debug */,
+				1D0A43AB1656ED2800D2DEA4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1D0A43921656ED2800D2DEA4 /* Project object */;
+}
