@@ -6,6 +6,7 @@ Gem::Specification.new do |gem|
   gem.version       = AVClub::VERSION
 
   gem.authors  = ['Colin T.A. Gray <colinta@gmail.com>']
+  gem.email          = 'colinta@gmail.com'
 
   gem.description = <<-DESC
 Setup an AVCaptureSession with video, multiple cameras, and still image
