@@ -5,7 +5,7 @@ Gem::Specification.new do |gem|
   gem.name          = 'AVClub'
   gem.version       = AVClub::VERSION
 
-  gem.authors  = ['the rubymotion community']
+  gem.authors  = ['Colin T.A. Gray <colinta@gmail.com>']
 
   gem.description = <<-DESC
 Setup an AVCaptureSession with video, multiple cameras, and still image
