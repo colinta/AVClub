@@ -44,7 +44,7 @@
     if (self != nil) {
         self.isRunning = NO;
 
-        __block id weakSelf = self;
+        __block AVClub *weakSelf = self;
         void (^deviceConnectedBlock)(NSNotification *) = ^(NSNotification *notification) {
             AVCaptureDevice *device = [notification object];
 
@@ -83,11 +83,11 @@
 
             if ( [device hasMediaType:AVMediaTypeAudio] ) {
                 [session removeInput:[weakSelf audioInput]];
-                [weakSelf setAudioInput:nil];
+                weakSelf.audioInput = nil;
             }
             else if ( [device hasMediaType:AVMediaTypeVideo] ) {
                 [session removeInput:[weakSelf videoInput]];
-                [weakSelf setVideoInput:nil];
+                weakSelf.videoInput = nil;
             }
 
             if ( [delegate respondsToSelector:@selector(clubDeviceConfigurationChanged:)] )
@@ -167,10 +167,10 @@
     if ( [newCaptureSession canAddOutput:newStillImageOutput] )
         [newCaptureSession addOutput:newStillImageOutput];
 
-    [self setStillImageOutput:newStillImageOutput];
-    [self setVideoInput:newVideoInput];
-    [self setAudioInput:newAudioInput];
-    [self setSession:newCaptureSession];
+    self.stillImageOutput = newStillImageOutput;
+    self.videoInput = newVideoInput;
+    self.audioInput = newAudioInput;
+    self.session = newCaptureSession;
 
     // Set up the movie file output
     NSURL *outputFileURL = [self tempFileURL];
@@ -191,7 +191,7 @@
             CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopCommonModes, ^{ [delegate club:self didFailWithError:noVideoError]; });
     }
 
-    [self setRecorder:newRecorder];
+    self.recorder = newRecorder;
 
     // Create video preview layer and add it to the UI
     if ( videoView )
@@ -354,7 +354,7 @@
             if ( [[self session] canAddInput:newVideoInput] )
             {
                 [[self session] addInput:newVideoInput];
-                [self setVideoInput:newVideoInput];
+                self.videoInput = newVideoInput;
             }
             else
                 [[self session] addInput:[self videoInput]];
