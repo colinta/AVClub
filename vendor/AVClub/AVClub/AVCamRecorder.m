@@ -118,6 +118,9 @@
 -(void)startRecordingWithOrientation:(AVCaptureVideoOrientation)videoOrientation;
 {
     AVCaptureConnection *videoConnection = [AVCamUtilities connectionWithMediaType:AVMediaTypeVideo fromConnections:[[self movieFileOutput] connections]];
+    if ( ! videoConnection )
+        return;
+
     if ([videoConnection isVideoOrientationSupported])
         [videoConnection setVideoOrientation:videoOrientation];
 

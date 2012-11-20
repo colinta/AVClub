@@ -280,6 +280,9 @@
 - (void) captureStillImageAnimated:(BOOL)animated
 {
     AVCaptureConnection *stillImageConnection = [AVCamUtilities connectionWithMediaType:AVMediaTypeVideo fromConnections:[[self stillImageOutput] connections]];
+    if ( ! stillImageConnection )
+        return;
+
     if ( [stillImageConnection isVideoOrientationSupported] )
         [stillImageConnection setVideoOrientation:self.orientation];
 
