@@ -2,7 +2,7 @@
 //  AVClub.h
 //  AVClub
 //
-//  Created by Colin Thomas-Arnold on 11/16/12.
+//  Created by Colin T.A. Gray on 11/16/12.
 //  Copyright (c) 2012 colinta. All rights reserved.
 //
 
