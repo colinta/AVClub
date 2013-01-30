@@ -29,15 +29,15 @@ Create a view for where you want the camera to appear.  Or don't, it's optional.
 
 1. Create a "club" - `AVClub.new`.
 2. Assign your controller as the delegate - `club.delegate = self`.
-3. and when you're ready - `startInView(viewfinder_view)`.  You can start and
-   stop the session by calling `club.stopSession`
+3. and when you're ready - `start_in_view(viewfinder_view)`.  You can start and
+   stop the session by calling `club.stop_session`
 
 ```ruby
 def viewDidLoad
   @video_view = UIView.alloc.initWithFrame([[10, 10], [100, 100]])  # an AVCaptureVideoPreviewLayer will be added to this view
   club = AVClub.new
   club.delegate = self
-  club.startInView(@video_view)
+  club.start_in_view(@video_view)
 end
 ```
 
@@ -46,11 +46,27 @@ For convenience, there is an included `AVClubController` class that adds two
 methods you can use or refer to:
 
 ```ruby
-# this method creates the club, assigns it to self.club, and assigns the
-# viewFinderView that you pass to self.viewFinderView
-def startInView(view)
+  # this method creates the club, assigns it to self.club, and assigns the
+  # viewFinderView that you pass to self.viewFinderView
+  def viewWillAppear(animated)
+    self.start_in_view(view)
+  end
 
-# call this in willRotateToInterfaceOrientation(toInterfaceOrientation,
-# duration:duration) and pass the new camera frame
-def rotateCameraTo(new_frame, orientation:toInterfaceOrientation, duration:duration)
+  # you have to tell AVClub to rotate the image using rotate_camera_to()
+  def willRotateToInterfaceOrientation(to_interface_orientation, duration:duration)
+    case to_interface_orientation
+    when UIInterfaceOrientationLandscapeLeft
+      new_frame = CGRect.new([0, 0], [480, 320])
+    when UIInterfaceOrientationLandscapeRight
+      new_frame = CGRect.new([0, 0], [480, 320])
+    when UIInterfaceOrientationPortrait
+      new_frame = CGRect.new([0, 0], [320, 480])
+    when UIInterfaceOrientationPortraitUpsideDown
+      new_frame = CGRect.new([0, 0], [320, 480])
+    end
+
+    rotate_camera_to(new_frame, orientation: to_interface_orientation, duration:duration)
+
+# and pass the new camera frame:
+def rotate_camea_to(new_frame, orientation:to_interface_orientation, duration:duration)
 ```

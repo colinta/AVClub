@@ -1,25 +1,25 @@
 class AVClubController < UIViewController
   attr_accessor :club
-  attr_accessor :viewFinderView
+  attr_accessor :view_finder_view
 
-  def startInView(view)
-    self.viewFinderView = view
+  def start_in_view(view)
+    @view_finder_view = view
 
-    unless club
-      self.club = AVClub.new
-      self.club.delegate = self
-      self.club.startInView(view)
+    unless @club
+      @club = AVClub.new
+      @club.delegate = self
+      @club.start_in_view(view)
     end
   end
 
   def club(club, didFailWithError:error)
-      alertView = UIAlertView.alloc.initWithTitle(error.localizedDescription,
-                                          message:error.localizedFailureReason,
-                                         delegate:nil,
-                                cancelButtonTitle:'OK',
-                                otherButtonTitles:nil
-                                                 )
-      alertView.show
+      alert_view = UIAlertView.alloc.initWithTitle(error.localizedDescription,
+                                           message:error.localizedFailureReason,
+                                          delegate:nil,
+                                 cancelButtonTitle:'OK',
+                                 otherButtonTitles:nil
+                                                  )
+      alert_view.show
   end
 
   def club(club, stillImageCaptured:image, error:error)
@@ -37,19 +37,19 @@ class AVClubController < UIViewController
   def clubDeviceConfigurationChanged(club)
   end
 
-  def rotateCameraTo(new_frame, orientation:toInterfaceOrientation, duration:duration)
-    return unless viewFinderView
+  def rotate_camera_to(new_frame, orientation:to_interface_orientation, duration:duration)
+    return unless @view_finder_view
 
-    captureVideoPreviewLayer = nil
-    viewFinderView.layer.sublayers.each do |layer|
+    capture_video_preview_layer = nil
+    @view_finder_view.layer.sublayers.each do |layer|
       if layer.is_a? AVCaptureVideoPreviewLayer
-        captureVideoPreviewLayer = layer
+        capture_video_preview_layer = layer
         break
       end
     end
-    return unless captureVideoPreviewLayer
+    return unless capture_video_preview_layer
 
-    case toInterfaceOrientation
+    case to_interface_orientation
     when UIInterfaceOrientationLandscapeLeft
       rotation = Math::PI / 2
     when UIInterfaceOrientationLandscapeRight
@@ -60,10 +60,11 @@ class AVClubController < UIViewController
       rotation = 2 * Math::PI
     end
 
-    captureVideoPreviewLayer.masksToBounds = true
+    capture_video_preview_layer.masksToBounds = true
     UIView.animateWithDuration(duration, animations:lambda{
-      captureVideoPreviewLayer.frame = new_frame
-      captureVideoPreviewLayer.orientation = toInterfaceOrientation
+      capture_video_preview_layer.frame = new_frame
+      capture_video_preview_layer.orientation = to_interface_orientation
     })
   end
+
 end

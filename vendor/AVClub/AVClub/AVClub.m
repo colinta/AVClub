@@ -46,7 +46,7 @@
 
         __block AVClub *weakSelf = self;
         void (^deviceConnectedBlock)(NSNotification *) = ^(NSNotification *notification) {
-            AVCaptureDevice *device = [notification object];
+            AVCaptureDevice *device = notification.object;
 
             BOOL sessionHasDeviceWithMatchingMediaType = NO;
             NSString *deviceMediaType = nil;
@@ -59,7 +59,7 @@
             {
                 for (AVCaptureDeviceInput *input in [self.session inputs])
                 {
-                    if ( [[input device] hasMediaType:deviceMediaType] )
+                    if ( [input.device hasMediaType:deviceMediaType] )
                     {
                         sessionHasDeviceWithMatchingMediaType = YES;
                         break;
@@ -79,14 +79,14 @@
                 CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopCommonModes, ^{ [delegate clubDeviceConfigurationChanged:self]; });
         };
         void (^deviceDisconnectedBlock)(NSNotification *) = ^(NSNotification *notification) {
-            AVCaptureDevice *device = [notification object];
+            AVCaptureDevice *device = notification.object;
 
             if ( [device hasMediaType:AVMediaTypeAudio] ) {
-                [session removeInput:[weakSelf audioInput]];
+                [session removeInput:weakSelf.audioInput];
                 weakSelf.audioInput = nil;
             }
             else if ( [device hasMediaType:AVMediaTypeVideo] ) {
-                [session removeInput:[weakSelf videoInput]];
+                [session removeInput:weakSelf.videoInput];
                 weakSelf.videoInput = nil;
             }
 
@@ -95,8 +95,8 @@
         };
 
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-        [self setDeviceConnectedObserver:[notificationCenter addObserverForName:AVCaptureDeviceWasConnectedNotification object:nil queue:nil usingBlock:deviceConnectedBlock]];
-        [self setDeviceDisconnectedObserver:[notificationCenter addObserverForName:AVCaptureDeviceWasDisconnectedNotification object:nil queue:nil usingBlock:deviceDisconnectedBlock]];
+        self.deviceConnectedObserver = [notificationCenter addObserverForName:AVCaptureDeviceWasConnectedNotification object:nil queue:nil usingBlock:deviceConnectedBlock];
+        self.deviceDisconnectedObserver = [notificationCenter addObserverForName:AVCaptureDeviceWasDisconnectedNotification object:nil queue:nil usingBlock:deviceDisconnectedBlock];
         [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
         [notificationCenter addObserver:self selector:@selector(deviceOrientationDidChange) name:UIDeviceOrientationDidChangeNotification object:nil];
         self.orientation = AVCaptureVideoOrientationPortrait;
@@ -108,41 +108,41 @@
 - (void) dealloc
 {
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter removeObserver:[self deviceConnectedObserver]];
-    [notificationCenter removeObserver:[self deviceDisconnectedObserver]];
+    [notificationCenter removeObserver:self.deviceConnectedObserver];
+    [notificationCenter removeObserver:self.deviceDisconnectedObserver];
     [notificationCenter removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
 
-    [self stopSession];
+    [self stop_session];
 }
 
 - (void) startInView:(UIView*)videoView
 {
     // Set torch and flash mode to auto
-    if ( [[self backFacingCamera] hasFlash] )
+    if ( self.backFacingCamera.hasFlash )
     {
-        if ( [[self backFacingCamera] lockForConfiguration:nil] )
+        if ( [self.backFacingCamera lockForConfiguration:nil] )
         {
-            if ( [[self backFacingCamera] isFlashModeSupported:AVCaptureFlashModeAuto] )
-                [[self backFacingCamera] setFlashMode:AVCaptureFlashModeAuto];
+            if ( [self.backFacingCamera isFlashModeSupported:AVCaptureFlashModeAuto] )
+                [self.backFacingCamera setFlashMode:AVCaptureFlashModeAuto];
 
-            [[self backFacingCamera] unlockForConfiguration];
+            [self.backFacingCamera unlockForConfiguration];
         }
     }
-    if ( [[self backFacingCamera] hasTorch] )
+    if ( self.backFacingCamera.hasTorch )
     {
-        if ( [[self backFacingCamera] lockForConfiguration:nil] )
+        if ( [self.backFacingCamera lockForConfiguration:nil] )
         {
-            if ( [[self backFacingCamera] isTorchModeSupported:AVCaptureTorchModeAuto] )
-                [[self backFacingCamera] setTorchMode:AVCaptureTorchModeAuto];
+            if ( [self.backFacingCamera isTorchModeSupported:AVCaptureTorchModeAuto] )
+                [self.backFacingCamera setTorchMode:AVCaptureTorchModeAuto];
 
-            [[self backFacingCamera] unlockForConfiguration];
+            [self.backFacingCamera unlockForConfiguration];
         }
     }
 
     // Init the device inputs
-    AVCaptureDeviceInput *newVideoInput = [[AVCaptureDeviceInput alloc] initWithDevice:[self backFacingCamera] error:nil];
-    AVCaptureDeviceInput *newAudioInput = [[AVCaptureDeviceInput alloc] initWithDevice:[self audioDevice] error:nil];
+    AVCaptureDeviceInput *newVideoInput = [[AVCaptureDeviceInput alloc] initWithDevice:self.backFacingCamera error:nil];
+    AVCaptureDeviceInput *newAudioInput = [[AVCaptureDeviceInput alloc] initWithDevice:self.audioDevice error:nil];
 
 
     // Setup the still image file output
@@ -173,12 +173,12 @@
     self.session = newCaptureSession;
 
     // Set up the movie file output
-    NSURL *outputFileURL = [self tempFileURL];
-    AVCamRecorder *newRecorder = [[AVCamRecorder alloc] initWithSession:[self session] outputFileURL:outputFileURL];
+    NSURL *outputFileURL = self.tempFileURL;
+    AVCamRecorder *newRecorder = [[AVCamRecorder alloc] initWithSession:self.session outputFileURL:outputFileURL];
     [newRecorder setDelegate:self];
 
     // Send an error to the delegate if video recording is unavailable
-    if ( ! [newRecorder recordsVideo] && [newRecorder recordsAudio] )
+    if ( ! newRecorder.recordsVideo && newRecorder.recordsAudio )
     {
         NSString *localizedDescription = NSLocalizedString(@"Video recording unavailable", @"Video recording unavailable description");
         NSString *localizedFailureReason = NSLocalizedString(@"Movies recorded on this device will only contain audio. They will be accessible through iTunes file sharing.", @"Video recording unavailable failure reason");
@@ -196,45 +196,45 @@
     // Create video preview layer and add it to the UI
     if ( videoView )
     {
-        AVCaptureVideoPreviewLayer *newCaptureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:[self session]];
-        CALayer *viewLayer = [videoView layer];
+        AVCaptureVideoPreviewLayer *newCaptureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
+        CALayer *viewLayer = videoView.layer;
         [viewLayer setMasksToBounds:YES];
 
-        CGRect bounds = [videoView bounds];
+        CGRect bounds = videoView.bounds;
         [newCaptureVideoPreviewLayer setFrame:bounds];
 
-        if ( [[self recorder] isOrientationSupported] )
-            [[self recorder] setOrientation:AVCaptureVideoOrientationPortrait];
+        if ( self.recorder.isOrientationSupported )
+            [self.recorder setOrientation:AVCaptureVideoOrientationPortrait];
 
         [newCaptureVideoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
 
-        [viewLayer insertSublayer:newCaptureVideoPreviewLayer below:[[viewLayer sublayers] objectAtIndex:0]];
+        [viewLayer insertSublayer:newCaptureVideoPreviewLayer below:[viewLayer.sublayers objectAtIndex:0]];
 
         self.captureVideoPreviewLayer = newCaptureVideoPreviewLayer;
 
         // Start the session. This is done asychronously since -startRunning doesn't return until the session is running.
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self startSession];
+            [self start_session];
         });
 
         self.viewFinderView = videoView;
     }
 }
 
-- (void) startSession
+- (void) start_session
 {
     if ( ! self.isRunning )
     {
-        [[self session] startRunning];
+        [self.session startRunning];
         self.isRunning = YES;
     }
 }
 
-- (void) stopSession
+- (void) stop_session
 {
     if ( self.isRunning )
     {
-        [[self session] stopRunning];
+        [self.session stopRunning];
         self.isRunning = NO;
     }
 }
@@ -247,16 +247,16 @@
         // to the foreground unless you request background execution time. This also ensures that there will be time to write the file to the assets library
         // when AVCam is backgrounded. To conclude this background execution, -endBackgroundTask is called in -recorder:recordingDidFinishToOutputFileURL:error:
         // after the recorded file has been saved.
-        [self setBackgroundRecordingID:[[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{}]];
+        self.backgroundRecordingID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{}];
     }
 
-    [self removeFile:[[self recorder] outputFileURL]];
-    [[self recorder] startRecordingWithOrientation:self.orientation];
+    [self removeFile:[self.recorder outputFileURL]];
+    [self.recorder startRecordingWithOrientation:self.orientation];
 }
 
 - (void) stopRecording
 {
-    [[self recorder] stopRecording];
+    [self.recorder stopRecording];
 }
 
 - (void) saveImageToLibrary:(UIImage*)image
@@ -268,8 +268,8 @@
             CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopCommonModes, ^{ [delegate club:self assetSavedToURL:assetURL error:error]; });
     };
 
-    [library writeImageToSavedPhotosAlbum:[image CGImage]
-                  orientation:(ALAssetOrientation)[image imageOrientation]
+    [library writeImageToSavedPhotosAlbum:image.CGImage
+                  orientation:(ALAssetOrientation)image.imageOrientation
                 completionBlock:completionBlock];
 }
 
@@ -279,7 +279,7 @@
 }
 - (void) captureStillImageAnimated:(BOOL)animated
 {
-    AVCaptureConnection *stillImageConnection = [AVCamUtilities connectionWithMediaType:AVMediaTypeVideo fromConnections:[[self stillImageOutput] connections]];
+    AVCaptureConnection *stillImageConnection = [AVCamUtilities connectionWithMediaType:AVMediaTypeVideo fromConnections:self.stillImageOutput.connections];
     if ( ! stillImageConnection )
         return;
 
@@ -289,9 +289,9 @@
     if ( animated )
     {
         // Flash the screen white and fade it out to give UI feedback that a still image was taken
-        UIView *flashView = [[UIView alloc] initWithFrame:[[[self viewFinderView] window] bounds]];
+        UIView *flashView = [[UIView alloc] initWithFrame:self.viewFinderView.window.bounds];
         [flashView setBackgroundColor:[UIColor whiteColor]];
-        [[[self viewFinderView] window] addSubview:flashView];
+        [self.viewFinderView.window addSubview:flashView];
 
         [UIView animateWithDuration:.4f
                          animations:^{
@@ -303,7 +303,7 @@
          ];
     }
 
-    [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:stillImageConnection
+    [self.stillImageOutput captureStillImageAsynchronouslyFromConnection:stillImageConnection
                                                          completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
 
                                                              void (^completionBlock)(UIImage*,NSError*) = ^(UIImage *image, NSError *error) {
@@ -337,31 +337,30 @@
 {
     BOOL success = NO;
 
-    if ( [self cameraCount] > 1 )
+    if ( self.cameraCount > 1 )
     {
         NSError *error;
         AVCaptureDeviceInput *newVideoInput;
         AVCaptureDevicePosition position = [[self.videoInput device] position];
 
         if ( position == AVCaptureDevicePositionBack )
-            newVideoInput = [[AVCaptureDeviceInput alloc] initWithDevice:[self frontFacingCamera] error:&error];
+        {
+            newVideoInput = [[AVCaptureDeviceInput alloc] initWithDevice:self.frontFacingCamera error:&error];
+        }
         else if ( position == AVCaptureDevicePositionFront )
-            newVideoInput = [[AVCaptureDeviceInput alloc] initWithDevice:[self backFacingCamera] error:&error];
+        {
+            newVideoInput = [[AVCaptureDeviceInput alloc] initWithDevice:self.backFacingCamera error:&error];
+        }
         else
             goto bail;
 
-        if ( newVideoInput != nil )
+        if ( newVideoInput && [self.session canAddInput:newVideoInput] )
         {
-            [[self session] beginConfiguration];
-            [[self session] removeInput:[self videoInput]];
-            if ( [[self session] canAddInput:newVideoInput] )
-            {
-                [[self session] addInput:newVideoInput];
-                self.videoInput = newVideoInput;
-            }
-            else
-                [[self session] addInput:[self videoInput]];
-            [[self session] commitConfiguration];
+            [self.session beginConfiguration];
+            [self.session removeInput:self.videoInput];
+            [self.session addInput:newVideoInput];
+            self.videoInput = newVideoInput;
+            [self.session commitConfiguration];
             success = YES;
         }
         else if ( error )
@@ -389,19 +388,19 @@ bail:
 
 - (BOOL) hasCamera
 {
-    return [self cameraCount] > 0;
+    return self.cameraCount > 0;
 }
 - (BOOL) hasMultipleCameras
 {
-    return [self cameraCount] > 1;
+    return self.cameraCount > 1;
 }
 - (BOOL) hasAudio
 {
-    return [self micCount] > 0;
+    return self.micCount > 0;
 }
 - (BOOL) hasVideo
 {
-    return [self hasCamera] && [self hasAudio];
+    return self.hasCamera && self.hasAudio;
 }
 
 
@@ -409,8 +408,8 @@ bail:
 // Perform an auto focus at the specified point. The focus mode will automatically change to locked once the auto focus is complete.
 - (void) autoFocusAtPoint:(CGPoint)point
 {
-    AVCaptureDevice *device = [[self videoInput] device];
-    if ([device isFocusPointOfInterestSupported] && [device isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
+    AVCaptureDevice *device = self.videoInput.device;
+    if ( device.isFocusPointOfInterestSupported && [device isFocusModeSupported:AVCaptureFocusModeAutoFocus] ) {
         NSError *error;
         if ( [device lockForConfiguration:&error] )
         {
@@ -429,9 +428,9 @@ bail:
 // Switch to continuous auto focus mode at the specified point
 - (void) continuousFocusAtPoint:(CGPoint)point
 {
-    AVCaptureDevice *device = [[self videoInput] device];
+    AVCaptureDevice *device = self.videoInput.device;
 
-    if ( [device isFocusPointOfInterestSupported] && [device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus] )
+    if ( device.isFocusPointOfInterestSupported && [device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus] )
     {
         NSError *error;
         if ( [device lockForConfiguration:&error] )
@@ -453,9 +452,9 @@ bail:
 - (CGPoint)convertToPointOfInterestFromViewCoordinates:(CGPoint)viewCoordinates
 {
     CGPoint pointOfInterest = CGPointMake(.5f, .5f);
-    CGSize frameSize = [[self viewFinderView] frame].size;
+    CGSize frameSize = self.viewFinderView.frame.size;
 
-    if ( [[self recorder] isMirrored] )
+    if ( self.recorder.isMirrored )
         viewCoordinates.x = frameSize.width - viewCoordinates.x;
 
     if ( [[self.captureVideoPreviewLayer videoGravity] isEqualToString:AVLayerVideoGravityResize] )
@@ -466,11 +465,11 @@ bail:
     else
     {
         CGRect cleanAperture;
-        for (AVCaptureInputPort *port in [[self videoInput] ports])
+        for (AVCaptureInputPort *port in self.videoInput.ports)
         {
-            if ( [port mediaType] == AVMediaTypeVideo )
+            if ( port.mediaType == AVMediaTypeVideo )
             {
-                cleanAperture = CMVideoFormatDescriptionGetCleanAperture([port formatDescription], YES);
+                cleanAperture = CMVideoFormatDescriptionGetCleanAperture(port.formatDescription, YES);
                 CGSize apertureSize = cleanAperture.size;
                 CGPoint point = viewCoordinates;
 
@@ -565,7 +564,7 @@ bail:
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
     for (AVCaptureDevice *device in devices)
     {
-        if ( [device position] == position )
+        if ( device.position == position )
             return device;
     }
     return nil;
@@ -587,7 +586,7 @@ bail:
 - (AVCaptureDevice *) audioDevice
 {
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
-    if ( [devices count] > 0 )
+    if ( devices.count > 0 )
         return [devices objectAtIndex:0];
     return nil;
 }
@@ -599,7 +598,7 @@ bail:
 
 - (void) removeFile:(NSURL *)fileURL
 {
-    NSString *filePath = [fileURL path];
+    NSString *filePath = fileURL.path;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if ( [fileManager fileExistsAtPath:filePath] )
     {
@@ -640,7 +639,7 @@ bail:
 
 -(void)recorder:(AVCamRecorder *)recorder recordingDidFinishToOutputFileURL:(NSURL *)outputFileURL error:(NSError *)error
 {
-    if ( [[self recorder] recordsAudio] && ![[self recorder] recordsVideo] )
+    if ( self.recorder.recordsAudio && ! self.recorder.recordsVideo )
     {
         // If the file was created on a device that doesn't support video recording, it can't be saved to the assets
         // library. Instead, save it in the app's Documents directory, whence it can be copied from the device via
@@ -648,7 +647,7 @@ bail:
         [self copyFileToDocuments:outputFileURL];
 
         if ( [[UIDevice currentDevice] isMultitaskingSupported] )
-            [[UIApplication sharedApplication] endBackgroundTask:[self backgroundRecordingID]];
+            [[UIApplication sharedApplication] endBackgroundTask:self.backgroundRecordingID];
 
         if ( [delegate respondsToSelector:@selector(clubRecordingFinished:)] )
             CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopCommonModes, ^{ [delegate clubRecordingFinished:self]; });
@@ -665,7 +664,7 @@ bail:
                                         }
 
                                         if ( [[UIDevice currentDevice] isMultitaskingSupported] )
-                                            [[UIApplication sharedApplication] endBackgroundTask:[self backgroundRecordingID]];
+                                            [[UIApplication sharedApplication] endBackgroundTask:self.backgroundRecordingID];
 
                                         if ( [delegate respondsToSelector:@selector(clubRecordingFinished:)] )
                                             CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopCommonModes, ^{ [delegate clubRecordingFinished:self]; });

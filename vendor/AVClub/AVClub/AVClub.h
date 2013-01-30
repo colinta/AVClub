@@ -34,10 +34,10 @@
 
 
 - (void) startInView:(UIView*)videoView;
-- (void) startSession;
-- (void) stopSession;
+- (void) start_session;
+- (void) stop_session;
 
-- (CGPoint)convertToPointOfInterestFromViewCoordinates:(CGPoint)viewCoordinates;
+- (CGPoint) convertToPointOfInterestFromViewCoordinates:(CGPoint)viewCoordinates;
 - (void) startRecording;
 - (void) stopRecording;
 - (void) saveImageToLibrary:(UIImage*)image;

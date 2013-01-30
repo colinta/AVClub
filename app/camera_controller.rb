@@ -1,18 +1,18 @@
 class CameraController < AVClubController
-  attr_accessor :record_button, :still_button, :toggle_button;
+  attr_accessor :record_button, :still_button, :toggle_button
 
   def viewDidLoad
     super
     self.view.backgroundColor = UIColor.darkGrayColor
 
-    self.viewFinderView = UIView.alloc.initWithFrame(UIEdgeInsetsInsetRect(self.view.bounds, [50, 20, 20, 20]))
-    self.viewFinderView.autoresizingMask = UIViewAutoresizingFlexibleHeight |
+    @view_finder_view = UIView.alloc.initWithFrame(UIEdgeInsetsInsetRect(self.view.bounds, [50, 20, 20, 20]))
+    @view_finder_view.autoresizingMask = UIViewAutoresizingFlexibleHeight |
                                              UIViewAutoresizingFlexibleWidth
-    self.viewFinderView.backgroundColor = UIColor.lightGrayColor
-    self.view.addSubview(self.viewFinderView)
+    @view_finder_view.backgroundColor = UIColor.lightGrayColor
+    self.view.addSubview(@view_finder_view)
 
     ### important ###
-    startInView(self.viewFinderView)
+    start_in_view(@view_finder_view)
 
     width = 0
     height = 0
@@ -69,19 +69,19 @@ class CameraController < AVClubController
     self.update_button_states
 
     # Add a single tap gesture to focus on the point tapped, then lock focus
-    singleTap = UITapGestureRecognizer.alloc.initWithTarget(self, action:'tapToAutoFocus:')
+    singleTap = UITapGestureRecognizer.alloc.initWithTarget(self, action:'tap_to_auto_focus:')
     singleTap.setDelegate(self)
     singleTap.setNumberOfTapsRequired(1)
-    self.viewFinderView.addGestureRecognizer(singleTap)
+    @view_finder_view.addGestureRecognizer(singleTap)
   end
 
   # Auto focus at a particular point. The focus mode will change to locked once
   # the auto focus happens.
-  def tapToAutoFocus(gestureRecognizer)
+  def tap_to_auto_focus(gestureRecognizer)
     return unless club.videoInput
 
     if club.videoInput.device.isFocusPointOfInterestSupported
-      tapPoint = gestureRecognizer.locationInView(viewFinderView)
+      tapPoint = gestureRecognizer.locationInView(@view_finder_view)
       convertedFocusPoint = club.convertToPointOfInterestFromViewCoordinates(tapPoint)
       club.autoFocusAtPoint(convertedFocusPoint)
     end
@@ -99,7 +99,7 @@ class CameraController < AVClubController
 
   def toggleCamera(sender)
     # Toggle between cameras when there is more than one
-    club.toggleCamera
+    club.toggleCameraAnimated(true)
 
     # Do an initial focus
     club.continuousFocusAtPoint(CGPoint.new(0.5, 0.5))
@@ -172,10 +172,10 @@ class CameraController < AVClubController
     update_button_states
   end
 
-  def willRotateToInterfaceOrientation(toInterfaceOrientation, duration:duration)
+  def willRotateToInterfaceOrientation(to_interface_duration, duration:duration)
     super
 
-    case toInterfaceOrientation
+    case to_interface_duration
     when UIInterfaceOrientationLandscapeLeft
       new_frame = CGRect.new([0, 0], [480, 320])
     when UIInterfaceOrientationLandscapeRight
@@ -187,7 +187,7 @@ class CameraController < AVClubController
     end
 
     ### important ###
-    rotateCameraTo(new_frame, orientation:toInterfaceOrientation, duration:duration)
+    rotate_camera_to(new_frame, orientation:to_interface_duration, duration:duration)
   end
 
 end
