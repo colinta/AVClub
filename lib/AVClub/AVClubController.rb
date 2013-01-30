@@ -66,13 +66,7 @@ class AVClubController < UIViewController
       capture_video_preview_layer.anchorPoint = [0.5, 0.5]
       capture_video_preview_layer.transform = transform
       capture_video_preview_layer.frame = new_frame
-      # capture_video_preview_layer.orientation = to_interface_orientation
       club.orientation = to_interface_orientation
-      NSLog("=============== AVClubController.rb line #{__LINE__} ===============
-=============== #{self.class == Class ? self.name + '##' : self.class.name + '#'}#{__method__} ===============
-capture_video_preview_layer: #{capture_video_preview_layer.inspect}
-capture_video_preview_layer.frame: #{capture_video_preview_layer.frame.inspect}
-")
     })
   end
 
