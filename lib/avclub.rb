@@ -21,7 +21,7 @@ Motion::Project::App.setup do |app|
     app.files.insert(insert_point, file)
   end
 
-  app.vendor_project(File.join(File.dirname(__FILE__), '../vendor/AVClub'), :xcode)
+  app.vendor_project(File.join(File.dirname(__FILE__), '../vendor/AVClub'), :static, cflags: '-fobjc-arc')
 
   app.frameworks.concat [
     'MediaPlayer',
