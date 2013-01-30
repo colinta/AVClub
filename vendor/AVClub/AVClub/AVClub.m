@@ -354,19 +354,26 @@
         else
             goto bail;
 
-        if ( newVideoInput && [self.session canAddInput:newVideoInput] )
-        {
-            [self.session beginConfiguration];
-            [self.session removeInput:self.videoInput];
-            [self.session addInput:newVideoInput];
-            self.videoInput = newVideoInput;
-            [self.session commitConfiguration];
-            success = YES;
-        }
-        else if ( error )
+        if ( error )
         {
             if ( [delegate respondsToSelector:@selector(club:didFailWithError:)] )
                 CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopCommonModes, ^{ [delegate club:self didFailWithError:error]; });
+        }
+        else
+        {
+            [self.session beginConfiguration];
+            [self.session removeInput:self.videoInput];
+            if ( [self.session canAddInput:newVideoInput] )
+            {
+                [self.session addInput:newVideoInput];
+                self.videoInput = newVideoInput;
+            }
+            else
+            {
+                [self.session addInput:self.videoInput];
+            }
+            [self.session commitConfiguration];
+            success = YES;
         }
     }
 
