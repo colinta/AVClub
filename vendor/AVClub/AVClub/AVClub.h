@@ -1,6 +1,6 @@
 //
 //  AVClub.h
-//  AVClub
+//  AVClub.  Based on the AVCam demo by Apple.
 //
 //  Created by Colin T.A. Gray on 11/16/12.
 //  Copyright (c) 2012 colinta. All rights reserved.
@@ -34,8 +34,8 @@
 
 
 - (void) startInView:(UIView*)videoView;
-- (void) start_session;
-- (void) stop_session;
+- (void) startSession;
+- (void) stopSession;
 
 - (CGPoint) convertToPointOfInterestFromViewCoordinates:(CGPoint)viewCoordinates;
 - (void) startRecording;

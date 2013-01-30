@@ -70,6 +70,8 @@
 -(BOOL)isMirrored;
 -(void)startRecordingWithOrientation:(AVCaptureVideoOrientation)videoOrientation;
 -(void)stopRecording;
+- (AVCaptureConnection*) audioConnection;
+- (AVCaptureConnection*) videoConnection;
 
 @end
 

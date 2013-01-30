@@ -1,6 +1,6 @@
 //
 //  AVClub.m
-//  AVClub
+//  AVClub.  Based on the AVCam demo by Apple.
 //
 //  Created by Colin T.A. Gray on 11/16/12.
 //  Copyright (c) 2012 colinta. All rights reserved.
@@ -113,7 +113,7 @@
     [notificationCenter removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
 
-    [self stop_session];
+    [self stopSession];
 }
 
 - (void) startInView:(UIView*)videoView
@@ -214,14 +214,14 @@
 
         // Start the session. This is done asychronously since -startRunning doesn't return until the session is running.
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self start_session];
+            [self startSession];
         });
 
         self.viewFinderView = videoView;
     }
 }
 
-- (void) start_session
+- (void) startSession
 {
     if ( ! self.isRunning )
     {
@@ -230,7 +230,7 @@
     }
 }
 
-- (void) stop_session
+- (void) stopSession
 {
     if ( self.isRunning )
     {

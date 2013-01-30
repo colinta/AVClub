@@ -5,14 +5,13 @@ class CameraController < AVClubController
     super
     self.view.backgroundColor = UIColor.darkGrayColor
 
-    @view_finder_view = UIView.alloc.initWithFrame(UIEdgeInsetsInsetRect(self.view.bounds, [50, 20, 20, 20]))
-    @view_finder_view.autoresizingMask = UIViewAutoresizingFlexibleHeight |
-                                             UIViewAutoresizingFlexibleWidth
-    @view_finder_view.backgroundColor = UIColor.lightGrayColor
-    self.view.addSubview(@view_finder_view)
+    view_finder = UIView.alloc.initWithFrame(UIEdgeInsetsInsetRect(self.view.bounds, [50, 20, 20, 20]))
+    view_finder.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth
+    view_finder.backgroundColor = UIColor.lightGrayColor
+    self.view.addSubview(view_finder)
 
     ### important ###
-    start_in_view(@view_finder_view)
+    start_in_view(view_finder)
 
     width = 0
     height = 0
@@ -22,7 +21,7 @@ class CameraController < AVClubController
       width += CGRectGetWidth(button.frame)
       height = CGRectGetHeight(button.frame)
 
-      button.addTarget(self, action: 'toggleCamera:', forControlEvents:UIControlEventTouchUpInside)
+      button.addTarget(self, action: 'toggle_camera:', forControlEvents:UIControlEventTouchUpInside)
     end
     width += 10
 
@@ -31,7 +30,7 @@ class CameraController < AVClubController
       button.sizeToFit
       width += CGRectGetWidth(button.frame)
 
-      button.addTarget(self, action: 'toggleRecording:', forControlEvents:UIControlEventTouchUpInside)
+      button.addTarget(self, action: 'toggle_recording:', forControlEvents:UIControlEventTouchUpInside)
     end
     width += 10
 
@@ -40,7 +39,7 @@ class CameraController < AVClubController
       button.sizeToFit
       width += CGRectGetWidth(button.frame)
 
-      button.addTarget(self, action: 'captureStillImage:', forControlEvents:UIControlEventTouchUpInside)
+      button.addTarget(self, action: 'capture_still_image:', forControlEvents:UIControlEventTouchUpInside)
     end
 
     left = (CGRectGetWidth(self.view.frame) - width) / 2.0
@@ -72,24 +71,23 @@ class CameraController < AVClubController
     singleTap = UITapGestureRecognizer.alloc.initWithTarget(self, action:'tap_to_auto_focus:')
     singleTap.setDelegate(self)
     singleTap.setNumberOfTapsRequired(1)
-    @view_finder_view.addGestureRecognizer(singleTap)
+    view_finder.addGestureRecognizer(singleTap)
   end
 
-  # Auto focus at a particular point. The focus mode will change to locked once
-  # the auto focus happens.
-  def tap_to_auto_focus(gestureRecognizer)
+  # Auto focus at a particular point. The focus mode will remain locked.
+  def tap_to_auto_focus(gesture_recognizer)
     return unless club.videoInput
 
     if club.videoInput.device.isFocusPointOfInterestSupported
-      tapPoint = gestureRecognizer.locationInView(@view_finder_view)
+      tapPoint = gesture_recognizer.locationInView(gesture_recognizer.view)
       convertedFocusPoint = club.convertToPointOfInterestFromViewCoordinates(tapPoint)
       club.autoFocusAtPoint(convertedFocusPoint)
     end
   end
 
-  # Change to continuous auto focus. The camera will constantly focus at the
-  # point choosen.
-  def tapToContinouslyAutoFocus(gestureRecognizer)
+  # Change to continuous auto focus. The camera will focus at the point choosen,
+  # and then continue to auto focus.
+  def tapToContinouslyAutoFocus(gesture_recognizer)
     return unless club.videoInput
 
     if club.videoInput.device.isFocusPointOfInterestSupported
@@ -97,17 +95,17 @@ class CameraController < AVClubController
     end
   end
 
-  def toggleCamera(sender)
+  def toggle_camera(sender)
     # Toggle between cameras when there is more than one
-    club.toggleCameraAnimated(true)
+    club.toggleCamera
 
     # Do an initial focus
     club.continuousFocusAtPoint(CGPoint.new(0.5, 0.5))
   end
 
-  def toggleRecording(sender)
+  def toggle_recording(sender)
     # Start recording if there isn't a recording running. Stop recording if there is.
-    record_button.setEnabled(false)
+    record_button.enabled = false
     unless club.recorder.isRecording
       club.startRecording
     else
@@ -115,11 +113,11 @@ class CameraController < AVClubController
     end
   end
 
-  def captureStillImage(sender)
+  def capture_still_image(sender)
     return unless still_button.isEnabled
 
     # Capture a still image
-    still_button.setEnabled(false)
+    still_button.enabled = false
     club.captureStillImageAnimated(true)
   end
 

@@ -80,34 +80,40 @@
     [[self session] removeOutput:[self movieFileOutput]];
 }
 
+- (AVCaptureConnection *)videoConnection
+{
+    return [AVCamUtilities connectionWithMediaType:AVMediaTypeVideo fromConnections:[[self movieFileOutput] connections]];
+}
+
+- (AVCaptureConnection *)audioConnection
+{
+    return [AVCamUtilities connectionWithMediaType:AVMediaTypeAudio fromConnections:[[self movieFileOutput] connections]];
+}
+
+
 -(BOOL)isOrientationSupported
 {
-	AVCaptureConnection *videoConnection = [AVCamUtilities connectionWithMediaType:AVMediaTypeVideo fromConnections:[[self movieFileOutput] connections]];
-    return [videoConnection isVideoOrientationSupported];
+    return [self.videoConnection isVideoOrientationSupported];
 }
 
 -(void)setOrientation:(AVCaptureVideoOrientation)orientation
 {
-	AVCaptureConnection *videoConnection = [AVCamUtilities connectionWithMediaType:AVMediaTypeVideo fromConnections:[[self movieFileOutput] connections]];
-    return [videoConnection setVideoOrientation:orientation];
+    return [self.videoConnection setVideoOrientation:orientation];
 }
 
 -(BOOL)isMirrored
 {
-	AVCaptureConnection *videoConnection = [AVCamUtilities connectionWithMediaType:AVMediaTypeVideo fromConnections:[[self movieFileOutput] connections]];
-	return [videoConnection isVideoMirrored];
+	return [self.videoConnection isVideoMirrored];
 }
 
 -(BOOL)recordsVideo
 {
-	AVCaptureConnection *videoConnection = [AVCamUtilities connectionWithMediaType:AVMediaTypeVideo fromConnections:[[self movieFileOutput] connections]];
-	return [videoConnection isActive];
+	return [self.videoConnection isActive];
 }
 
 -(BOOL)recordsAudio
 {
-	AVCaptureConnection *audioConnection = [AVCamUtilities connectionWithMediaType:AVMediaTypeAudio fromConnections:[[self movieFileOutput] connections]];
-	return [audioConnection isActive];
+	return [self.audioConnection isActive];
 }
 
 -(BOOL)isRecording
@@ -117,12 +123,11 @@
 
 -(void)startRecordingWithOrientation:(AVCaptureVideoOrientation)videoOrientation;
 {
-    AVCaptureConnection *videoConnection = [AVCamUtilities connectionWithMediaType:AVMediaTypeVideo fromConnections:[[self movieFileOutput] connections]];
-    if ( ! videoConnection )
+    if ( ! self.videoConnection )
         return;
 
-    if ([videoConnection isVideoOrientationSupported])
-        [videoConnection setVideoOrientation:videoOrientation];
+    if ([self.videoConnection isVideoOrientationSupported])
+        [self.videoConnection setVideoOrientation:videoOrientation];
 
     [[self movieFileOutput] startRecordingToOutputFileURL:[self outputFileURL] recordingDelegate:self];
 }
@@ -133,6 +138,7 @@
 }
 
 @end
+
 
 @implementation AVCamRecorder (FileOutputDelegate)
 
