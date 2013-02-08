@@ -43,6 +43,9 @@
 - (void) saveImageToLibrary:(UIImage*)image;
 - (void) captureStillImage;
 - (void) captureStillImageAnimated:(BOOL)animated;
+- (AVCaptureDevice *) frontFacingCamera;
+- (AVCaptureDevice *) backFacingCamera;
+- (AVCaptureDevicePosition) currentCamera;
 - (BOOL) toggleCamera;
 - (BOOL) toggleCameraAnimated:(BOOL)animated;
 - (void) autoFocusAtPoint:(CGPoint)point;

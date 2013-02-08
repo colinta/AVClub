@@ -21,8 +21,6 @@
 #pragma mark -
 @interface AVClub (InternalUtilityMethods)
 - (AVCaptureDevice *) cameraWithPosition:(AVCaptureDevicePosition)position;
-- (AVCaptureDevice *) frontFacingCamera;
-- (AVCaptureDevice *) backFacingCamera;
 - (AVCaptureDevice *) audioDevice;
 - (NSURL *) tempFileURL;
 - (void) removeFile:(NSURL *)outputFileURL;
@@ -124,17 +122,18 @@
         if ( [self.backFacingCamera lockForConfiguration:nil] )
         {
             if ( [self.backFacingCamera isFlashModeSupported:AVCaptureFlashModeAuto] )
-                [self.backFacingCamera setFlashMode:AVCaptureFlashModeAuto];
+                self.backFacingCamera.flashMode = AVCaptureFlashModeAuto;
 
             [self.backFacingCamera unlockForConfiguration];
         }
     }
+
     if ( self.backFacingCamera.hasTorch )
     {
         if ( [self.backFacingCamera lockForConfiguration:nil] )
         {
             if ( [self.backFacingCamera isTorchModeSupported:AVCaptureTorchModeAuto] )
-                [self.backFacingCamera setTorchMode:AVCaptureTorchModeAuto];
+                self.backFacingCamera.torchMode = AVCaptureTorchModeAuto;
 
             [self.backFacingCamera unlockForConfiguration];
         }
@@ -150,7 +149,7 @@
     NSDictionary *outputSettings = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     AVVideoCodecJPEG, AVVideoCodecKey,
                                     nil];
-    [newStillImageOutput setOutputSettings:outputSettings];
+    newStillImageOutput.outputSettings = outputSettings;
 
 
     // Create session (use default AVCaptureSessionPresetHigh)
@@ -175,7 +174,7 @@
     // Set up the movie file output
     NSURL *outputFileURL = self.tempFileURL;
     AVCamRecorder *newRecorder = [[AVCamRecorder alloc] initWithSession:self.session outputFileURL:outputFileURL];
-    [newRecorder setDelegate:self];
+    newRecorder.delegate = self;
 
     // Send an error to the delegate if video recording is unavailable
     if ( ! newRecorder.recordsVideo && newRecorder.recordsAudio )
@@ -198,15 +197,15 @@
     {
         AVCaptureVideoPreviewLayer *newCaptureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
         CALayer *viewLayer = videoView.layer;
-        [viewLayer setMasksToBounds:YES];
+        viewLayer.masksToBounds = YES;
 
         CGRect bounds = videoView.bounds;
-        [newCaptureVideoPreviewLayer setFrame:bounds];
+        newCaptureVideoPreviewLayer.frame = bounds;
 
         if ( self.recorder.isOrientationSupported )
-            [self.recorder setOrientation:AVCaptureVideoOrientationPortrait];
+            self.recorder.orientation = AVCaptureVideoOrientationPortrait;
 
-        [newCaptureVideoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
+        newCaptureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
 
         [viewLayer insertSublayer:newCaptureVideoPreviewLayer below:[viewLayer.sublayers objectAtIndex:0]];
 
@@ -284,18 +283,18 @@
         return;
 
     if ( [stillImageConnection isVideoOrientationSupported] )
-        [stillImageConnection setVideoOrientation:self.orientation];
+        stillImageConnection.videoOrientation = self.orientation;
 
     if ( animated )
     {
         // Flash the screen white and fade it out to give UI feedback that a still image was taken
         UIView *flashView = [[UIView alloc] initWithFrame:self.viewFinderView.window.bounds];
-        [flashView setBackgroundColor:[UIColor whiteColor]];
+        flashView.backgroundColor = [UIColor whiteColor];
         [self.viewFinderView.window addSubview:flashView];
 
         [UIView animateWithDuration:.4f
                          animations:^{
-                             [flashView setAlpha:0.f];
+                             flashView.alpha = 0.f;
                          }
                          completion:^(BOOL finished){
                              [flashView removeFromSuperview];
@@ -341,7 +340,7 @@
     {
         NSError *error;
         AVCaptureDeviceInput *newVideoInput;
-        AVCaptureDevicePosition position = [[self.videoInput device] position];
+        AVCaptureDevicePosition position = [self currentCamera];
 
         if ( position == AVCaptureDevicePositionBack )
         {
@@ -420,8 +419,8 @@ bail:
         NSError *error;
         if ( [device lockForConfiguration:&error] )
         {
-            [device setFocusPointOfInterest:point];
-            [device setFocusMode:AVCaptureFocusModeAutoFocus];
+            device.focusPointOfInterest = point;
+            device.focusMode = AVCaptureFocusModeAutoFocus;
             [device unlockForConfiguration];
         }
         else
@@ -442,8 +441,8 @@ bail:
         NSError *error;
         if ( [device lockForConfiguration:&error] )
         {
-            [device setFocusPointOfInterest:point];
-            [device setFocusMode:AVCaptureFocusModeContinuousAutoFocus];
+            device.focusPointOfInterest = point;
+            device.focusMode = AVCaptureFocusModeContinuousAutoFocus;
             [device unlockForConfiguration];
         }
         else
@@ -589,6 +588,11 @@ bail:
     return [self cameraWithPosition:AVCaptureDevicePositionBack];
 }
 
+- (AVCaptureDevicePosition) currentCamera
+{
+    return [[self.videoInput device] position];
+}
+
 // Find and return an audio device, returning nil if one is not found
 - (AVCaptureDevice *) audioDevice
 {
@@ -622,7 +626,7 @@ bail:
 {
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd_HH-mm-ss"];
+    dateFormatter.dateFormat = @"yyyy-MM-dd_HH-mm-ss";
     NSString *destinationPath = [documentsDirectory stringByAppendingFormat:@"/output_%@.mov", [dateFormatter stringFromDate:[NSDate date]]];
     NSError    *error;
     if ( ! [[NSFileManager defaultManager] copyItemAtURL:fileURL toURL:[NSURL fileURLWithPath:destinationPath] error:&error] )
