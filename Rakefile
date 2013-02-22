@@ -11,7 +11,7 @@ Motion::Project::App.setup do |app|
   app.name = 'AVClub-Demo'
   app.files.insert(0, 'lib/AVClub/AVClubController.rb')
 
-  app.vendor_project('vendor/AVClub', :static, cflags: '-fobjc-arc')
+  app.vendor_project('vendor/AVClub', :static, :cflags => '-fobjc-arc')
   app.frameworks.concat [
     'MediaPlayer',
     'QuartzCore',

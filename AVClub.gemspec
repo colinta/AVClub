@@ -3,7 +3,7 @@ require File.expand_path('../lib/AVClub/version.rb', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.name          = 'AVClub'
-  gem.version       = AVClub::VERSION
+  gem.version       = AVClub::Version
 
   gem.authors  = ['Colin T.A. Gray <colinta@gmail.com>']
   gem.email          = 'colinta@gmail.com'
