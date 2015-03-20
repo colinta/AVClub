@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 $:.unshift("/Library/RubyMotion/lib")
-require 'motion/project'
+require 'motion/project/template/ios'
 if File.exists?(File.expand_path('~/.rubymotion.rb'))
   require '~/.rubymotion.rb'
 end
