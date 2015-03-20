@@ -136,9 +136,9 @@ class CameraController < AVClubController
         self.still_button.enabled = false
 
         if club.micCount > 0
-          self.record_button = true
+          self.record_button.enabled = true
         else
-          self.record_button = false
+          self.record_button.enabled = false
         end
       end
     end
